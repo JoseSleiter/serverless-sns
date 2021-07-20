@@ -1,0 +1,35 @@
+service: serverless-sns
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  region: us-east-2
+  stage: dev
+  profile: default
+  useDotenv: true
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Resource: "*"
+          Action:
+            - "sns:*"
+            - "lambda:*"
+            - "sts:AssumeRole"
+
+functions:
+
+  firstLambda:
+    handler: handler.firstLambda
+    events:
+      - http:
+          path: product
+          method: post
+          cors: true
+  secondLambda:
+    handler: handler.secondLambda
+  thirdLambda: 
+    handler: handler.thirdLambda
+    events:
+      - sns: dispatcher
